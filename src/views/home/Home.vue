@@ -8,7 +8,14 @@
       <div slot="center">购物车</div>
     </nav-bar>
 
-    <scroll class="content">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      :pull-up-load="true"
+      @pullingUp="loadMore"
+      @scroll="contentScroll"
+    >
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends" />
       <feature-view />
@@ -21,6 +28,10 @@
       <goods-list :goods="showGoods" />
     </scroll>
 
+    <back-top
+      @click.native="backClick"
+      v-show="isShowBackTop"
+    />
     <!--ul>li{列表}*100-->
     <!-- <ul>
       <li>列表</li>
@@ -132,6 +143,7 @@ import NavBar from 'components/common/navbar/NavBar'
 import Scroll from 'components/common/scroll/Scroll'
 import TabControl from "components/content/tabControl/TabControl"
 import GoodsList from "components/content/goods/GoodsList"
+import BackTop from "components/content/backTop/BackTop"
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
 import HomeSwiper from "./childComps/HomeSwiper"
@@ -145,6 +157,7 @@ export default {
       result: null,
       banners: [],
       recommends: [],
+      isShowBackTop: false,
       goods: {
         'pop': { page: 0, list: [] },
         'new': { page: 0, list: [] },
@@ -168,7 +181,8 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    BackTop
   },
   computed: {
 
@@ -191,7 +205,19 @@ export default {
           this.currentType = 'sell'
           break;
       }
+    },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0)
+    },
 
+    contentScroll(position) {
+      this.isShowBackTop = (-position.y) > 1000
+    },
+
+    loadMore() {
+      console.log("滑到底部了")
+      this.getHomeGoods(this.currentType)
+      this.$refs.scroll.refresh()
     },
 
     getHomeMultidata() {
@@ -208,6 +234,10 @@ export default {
         console.log("aaaa", res)
         this.goods[type].page += 1
         this.goods[type].list.push(...res.data.list)
+
+
+        //完成上拉加载更多
+        this.$refs.scroll.finishPullUp()
       })
     }
   }
