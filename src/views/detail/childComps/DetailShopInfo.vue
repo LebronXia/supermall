@@ -165,7 +165,7 @@ export default {
   text-align: center;
   margin-top: 10px;
 }
-.ennter-shop {
+.enter-shop {
   /* 行内快元素 同一行显示 */
   display: inline-block;
   font-size: 14px;
