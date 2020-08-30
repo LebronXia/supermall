@@ -1,17 +1,14 @@
 <!--  -->
 <template>
-  <swiper>
+  <swiper class="detail-swiper">
     <swiper-item
-      v-for="(item, index) in banners"
+      v-for="(item, index) in topImages"
       :key="index"
     >
-      <a :href="item.link">
-        <img
-          :src="item.image"
-          alt
-          @load="imageLoad"
-        />
-      </a>
+      <img
+        :src="item"
+        alt=""
+      >
     </swiper-item>
   </swiper>
 </template>
@@ -19,18 +16,17 @@
 <script>
 import { Swiper, SwiperItem } from 'components/common/swiper'
 export default {
+  name: "DetailSwiper",
   props: {
-    banners: {
+    topImages: {
       type: Array,
       default() {
         return []
       }
     }
-
   },
   data() {
     return {
-      isLoad: false
 
     };
   },
@@ -41,17 +37,16 @@ export default {
   },
 
   computed: {},
+  //生命周期 - 挂载完成（访问DOM元素）
+  mounted: {},
 
-  methods: {
-    imageLoad() {
-      if (!this.isLoad) {
-        this.$emit('swiperImageLoad')
-        this.isLoad = true
-      }
-    }
-  }
+  methods: {}
 }
 
 </script>
 <style scoped>
+.detail-swiper {
+  height: 300px;
+  overflow: hidden;
+}
 </style>

@@ -1,9 +1,13 @@
 <!--  -->
 <template>
-  <div class="goods-item">
+  <div
+    class="goods-item"
+    @click="itemClick"
+  >
     <img
       :src="goodsItem.show.img"
       alt=""
+      @load="imageLoad"
     >
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
@@ -35,7 +39,15 @@ export default {
   //生命周期 - 挂载完成（访问DOM元素）
   mounted: {},
 
-  methods: {}
+  methods: {
+    imageLoad() {
+      this.bus.$emit('itemImageLoad')
+    },
+    itemClick() {
+      this.$router.push('/detail/' + this.goodsItem.iid)
+    }
+
+  }
 }
 
 </script>
@@ -59,8 +71,11 @@ export default {
   text-align: center;
 }
 .goods-info p {
+  /* 溢出隐藏 */
   overflow: hidden;
+  /* 多行文本溢出显示省略号 */
   text-overflow: ellipsis;
+  /* 强行显示所有的文本不换行 */
   white-space: nowrap;
   margin-bottom: 3px;
 }

@@ -8,6 +8,14 @@
       <div slot="center">购物车</div>
     </nav-bar>
 
+    <tab-control
+      class="tab-control"
+      :titles="['流行','新款','精选']"
+      @tabClick="tabClick"
+      ref="tabControl1"
+      v-show="isTabFixed"
+    />
+
     <scroll
       class="content"
       ref="scroll"
@@ -16,13 +24,17 @@
       @pullingUp="loadMore"
       @scroll="contentScroll"
     >
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper
+        :banners="banners"
+        @swiperImageLoad=swiperImageLoad
+      ></home-swiper>
       <recommend-view :recommends="recommends" />
       <feature-view />
       <tab-control
         class="tab-control"
         :titles="['流行','新款','精选']"
         @tabClick="tabClick"
+        ref="tabControl2"
       />
 
       <goods-list :goods="showGoods" />
@@ -150,6 +162,8 @@ import HomeSwiper from "./childComps/HomeSwiper"
 import RecommendView from "./childComps/RecommendView"
 import FeatureView from "./childComps/FeatureView"
 
+import { debounce } from "common/utils"
+
 export default {
   data() {
     return {
@@ -158,6 +172,9 @@ export default {
       banners: [],
       recommends: [],
       isShowBackTop: false,
+      tabOffsetTop: 0,
+      isTabFixed: false,
+      saveY: 0,
       goods: {
         'pop': { page: 0, list: [] },
         'new': { page: 0, list: [] },
@@ -172,6 +189,32 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+  },
+
+  mounted() {
+
+    //防抖动处理
+    const refresh = debounce(this.$refs.scroll.refresh, 50)
+    this.bus.$on('itemImageLoad', () => {
+      refresh();
+    })
+  },
+
+  //活跃
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    this.$refs.scroll.refresh()
+
+  },
+
+  //不活跃
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY()
+  },
+
+  //销毁
+  destroyed() {
+
   },
 
   components: {
@@ -205,6 +248,9 @@ export default {
           this.currentType = 'sell'
           break;
       }
+
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0)
@@ -212,12 +258,18 @@ export default {
 
     contentScroll(position) {
       this.isShowBackTop = (-position.y) > 1000
+
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
 
     loadMore() {
       console.log("滑到底部了")
       this.getHomeGoods(this.currentType)
-      this.$refs.scroll.refresh()
+    },
+
+    swiperImageLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+      console.log('tabOffsetTop:' + this.tabOffsetTop)
     },
 
     getHomeMultidata() {

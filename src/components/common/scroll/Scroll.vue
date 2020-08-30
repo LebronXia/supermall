@@ -40,7 +40,8 @@ export default {
       click: true,
       scrollY: true,
       mouseWheel: true,
-      probeType: this.probeType
+      probeType: this.probeType,
+      pullUpLoad: this.pullUpLoad
     })
 
     //监听滚动的位置
