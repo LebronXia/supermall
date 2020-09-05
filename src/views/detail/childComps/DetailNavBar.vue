@@ -2,27 +2,11 @@
 <template>
   <div>
     <nav-bar>
-      <div
-        slot="left"
-        class="back"
-        @click="backClick"
-      >
-        <img
-          src="~assets/img/common/back.svg"
-          alt=""
-        >
+      <div slot="left" class="back" @click="backClick">
+        <img src="~assets/img/common/back.svg" alt="">
       </div>
-      <div
-        slot="center"
-        class="title"
-      >
-        <div
-          v-for="(item, index) in titles"
-          class="title-item"
-          :key="index"
-          :class="{active: index === currentIndex}"
-          @click="titleClick(index)"
-        >
+      <div slot="center" class="title">
+        <div v-for="(item, index) in titles" class="title-item" :key="index" :class="{active: index === currentIndex}" @click="titleClick(index)">
           {{item}}
 
         </div>
@@ -47,9 +31,9 @@ export default {
     NavBar
   },
 
-  computed: {},
+  computed:{},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted(){},
 
   methods: {
     backClick() {
@@ -73,6 +57,6 @@ export default {
   margin-top: 12px;
 }
 .active {
-    color: var(--color-high-text)
-  }
+  color: var(--color-high-text);
+}
 </style>

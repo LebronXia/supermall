@@ -1,152 +1,23 @@
 <!-- 首页 -->
 <template>
-  <div
-    id="home"
-    class="wrapper"
-  >
+  <div id="home" class="wrapper">
     <nav-bar class="home-nav">
       <div slot="center">购物车</div>
     </nav-bar>
 
-    <tab-control
-      class="tab-control"
-      :titles="['流行','新款','精选']"
-      @tabClick="tabClick"
-      ref="tabControl1"
-      v-show="isTabFixed"
-    />
+    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl1" v-show="isTabFixed" />
 
-    <scroll
-      class="content"
-      ref="scroll"
-      :probe-type="3"
-      :pull-up-load="true"
-      @pullingUp="loadMore"
-      @scroll="contentScroll"
-    >
-      <home-swiper
-        :banners="banners"
-        @swiperImageLoad=swiperImageLoad
-      ></home-swiper>
+    <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true" @pullingUp="loadMore" @scroll="contentScroll">
+      <home-swiper :banners="banners" @swiperImageLoad=swiperImageLoad></home-swiper>
       <recommend-view :recommends="recommends" />
       <feature-view />
-      <tab-control
-        class="tab-control"
-        :titles="['流行','新款','精选']"
-        @tabClick="tabClick"
-        ref="tabControl2"
-      />
+      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl2" />
 
       <goods-list :goods="showGoods" />
     </scroll>
 
-    <back-top
-      @click.native="backClick"
-      v-show="isShowBackTop"
-    />
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
     <!--ul>li{列表}*100-->
-    <!-- <ul>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-    </ul> -->
   </div>
 </template>
 
@@ -162,7 +33,7 @@ import HomeSwiper from "./childComps/HomeSwiper"
 import RecommendView from "./childComps/RecommendView"
 import FeatureView from "./childComps/FeatureView"
 
-import { debounce } from "common/utils"
+import { itemListenerMixin } from "common/mixin"
 
 export default {
   data() {
@@ -182,6 +53,7 @@ export default {
       }
     };
   },
+  mixins: [itemListenerMixin],
 
   created() {
     this.getHomeMultidata()
@@ -191,14 +63,6 @@ export default {
     this.getHomeGoods('sell')
   },
 
-  mounted() {
-
-    //防抖动处理
-    const refresh = debounce(this.$refs.scroll.refresh, 50)
-    this.bus.$on('itemImageLoad', () => {
-      refresh();
-    })
-  },
 
   //活跃
   activated() {
@@ -214,7 +78,7 @@ export default {
 
   //销毁
   destroyed() {
-
+    console.log("销毁")
   },
 
   components: {

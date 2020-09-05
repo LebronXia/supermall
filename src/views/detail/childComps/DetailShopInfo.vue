@@ -25,19 +25,10 @@
 
       <div class="shop-middle-item shop-middle-right">
         <table>
-          <tr
-            v-for="(item, index) in shop.score"
-            :key="index"
-          >
+          <tr v-for="(item, index) in shop.score" :key="index">
             <td>{{item.name}}</td>
-            <td
-              class="score"
-              :class="{'score-better': item.isBetter}"
-            >{{item.score}}</td>
-            <td
-              class="better"
-              :class="{'better-more': item.isBetter}"
-            >
+            <td class="score" :class="{'score-better': item.isBetter}">{{item.score}}</td>
+            <td class="better" :class="{'better-more': item.isBetter}">
               <span>{{item.isBetter ? "高": "低"}}</span>
             </td>
           </tr>
@@ -80,7 +71,7 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted() { },
 
   methods: {}
 }

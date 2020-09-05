@@ -16,6 +16,7 @@
         v-for="(item, index) in detailInfo.detailImage[0].list"
         :key="index"
         :src="item"
+        @load="imgLoad"
         alt=""
       >
     </div>
@@ -31,16 +32,29 @@ export default {
   },
   data() {
     return {
+      counter: 0,
+      imagesLength: 0
     };
   },
 
   components: {},
 
-  computed: {},
-  //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  computed: {}, 
 
-  methods: {}
+  methods: {
+    imgLoad() {
+      //判断图片是否全部完成
+      if (++this.counter === this.imagesLength) {
+        this.$emit('imgLoad')
+      }
+    }
+  },
+  watch: {
+    detailInfo() {
+      //获取图片的长度
+      this.imagesLength = this.detailInfo.detailImage[0].list.length
+    }
+  }
 }
 
 </script>

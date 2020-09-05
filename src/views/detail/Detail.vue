@@ -1,18 +1,15 @@
 <!--  -->
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="detail_wrapper">
+    <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="nav"></detail-nav-bar>
+    <scroll class="detail_wrapper" ref="scroll">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
-      <detail-goods-info :detail-info="detailInfo"></detail-goods-info>
-      <detail-param-info :param-info="paramInfo"></detail-param-info>
-      <detail-comment :commentInfo="comment"></detail-comment>
-      <goods-list
-        :goods='recommends'
-        ref="recommend"
-      ></goods-list>
+      <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad" ref="goodsInfo"></detail-goods-info>
+      <detail-param-info :param-info="paramInfo" ref="params"></detail-param-info>
+      <detail-comment :comment-info="comment" ref="recommend"></detail-comment>
+      <goods-list :goods='recommends' ref="recommend"></goods-list>
     </scroll>
 
   </div>
@@ -30,6 +27,8 @@ import DetailComment from "./childComps/DetailComment"
 import Scroll from "components/common/scroll/Scroll"
 import GoodsList from 'components/content/goods/GoodsList'
 
+import { itemListenerMixin } from "common/mixin"
+
 import { getDetail, Goods, Shop, GoodsParam, getRecommend } from "network/detail"
 export default {
   name: "Detail",
@@ -43,9 +42,11 @@ export default {
       paramInfo: {},
       comment: {},
       recommends: [],
+      themeTopYs: []
     };
 
   },
+  mixins: [itemListenerMixin],
   created() {
     this.iid = this.$route.params.iid
 
@@ -70,8 +71,8 @@ export default {
 
     // 请求推荐数据
     getRecommend().then(res => {
-      //this.recommends = res.data.list;
-      console.log(res);
+      this.recommends = res.data.list;
+      //console.log(res.data.list)
     });
   },
 
@@ -89,9 +90,28 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted() { },
 
-  methods: {}
+  methods: {
+    titleClick(index) {
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 500)
+    },
+
+    //图片全部加载完成，计算滚动区域
+    imgLoad() {
+      this.$refs.scroll.refresh()
+
+      console.log('图片加载完毕')
+      //设置对应的定位位置
+      this.themeTopYs = []
+      this.themeTopYs.push(0);
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+      // this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+      // this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
+      // this.themeTopYs.push(Number.MAX_VALUE)
+
+    }
+  }
 }
 
 </script>

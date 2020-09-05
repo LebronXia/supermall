@@ -1,14 +1,8 @@
 <!--  -->
 <template>
   <swiper class="detail-swiper">
-    <swiper-item
-      v-for="(item, index) in topImages"
-      :key="index"
-    >
-      <img
-        :src="item"
-        alt=""
-      >
+    <swiper-item v-for="(item, index) in topImages" :key="index">
+      <img :src="item" alt="">
     </swiper-item>
   </swiper>
 </template>
@@ -38,7 +32,7 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted() { },
 
   methods: {}
 }

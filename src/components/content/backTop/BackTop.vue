@@ -1,10 +1,7 @@
 <!--  -->
 <template>
   <div class="back-top">
-    <img
-      src="~assets/img/common/top.png"
-      alt=""
-    />
+    <img src="~assets/img/common/top.png" alt="" />
   </div>
 </template>
 
@@ -19,7 +16,7 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted() { },
 
   methods: {}
 }

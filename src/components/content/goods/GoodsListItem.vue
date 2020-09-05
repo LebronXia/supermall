@@ -5,7 +5,7 @@
     @click="itemClick"
   >
     <img
-      :src="goodsItem.show.img"
+      :src="showImage"
       alt=""
       @load="imageLoad"
     >
@@ -35,9 +35,11 @@ export default {
 
   components: {},
 
-  computed: {},
-  //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  computed: {
+    showImage() {
+      return this.goodsItem.image || this.goodsItem.show.img
+    }
+  }, 
 
   methods: {
     imageLoad() {

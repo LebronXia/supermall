@@ -1,13 +1,7 @@
 <!--  -->
 <template>
   <div class="tab-control">
-    <div
-      v-for="(item, index) in titles"
-      :key="index"
-      class="tab-control-item"
-      :class="{active: index === currentIndex}"
-      @click="itenClick(index)"
-    >
+    <div v-for="(item, index) in titles" :key="index" class="tab-control-item" :class="{active: index === currentIndex}" @click="itenClick(index)">
       <span>{{item}}</span>
     </div>
 
@@ -34,7 +28,7 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted: {},
+  mounted() { },
 
   methods: {
     itenClick(index) {
