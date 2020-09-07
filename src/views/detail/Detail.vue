@@ -2,13 +2,13 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="nav"></detail-nav-bar>
-    <scroll class="detail_wrapper" ref="scroll">
+    <scroll class="detail_wrapper" ref="scroll" @scroll="contentScroll" :probe-type='3'>
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad" ref="goodsInfo"></detail-goods-info>
       <detail-param-info :param-info="paramInfo" ref="params"></detail-param-info>
-      <detail-comment :comment-info="comment" ref="recommend"></detail-comment>
+      <detail-comment :comment-info="comment" ref="comment"></detail-comment>
       <goods-list :goods='recommends' ref="recommend"></goods-list>
     </scroll>
 
@@ -102,14 +102,31 @@ export default {
       this.$refs.scroll.refresh()
 
       console.log('图片加载完毕')
+      //console.log(this.$refs.comment.$el.offsetTop)
       //设置对应的定位位置
       this.themeTopYs = []
       this.themeTopYs.push(0);
       this.themeTopYs.push(this.$refs.params.$el.offsetTop)
-      // this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
-      // this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
-      // this.themeTopYs.push(Number.MAX_VALUE)
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+      this.themeTopYs.push(Number.MAX_VALUE)
+    },
+    contentScroll(position) {
 
+      // 0<y< themeTopYs[1]
+      // themeTopYs[1]<y< themeTopYs[2]
+      // themeTopYs[2]<y< themeTopYs[3]
+      // themeTopYs[3]<y
+      console.log("我滚")
+      const positionY = -position.y
+      let length = this.themeTopYs.length
+      for (let i = 0; i < length - 1; i++) {
+        if (this.currentIndex !== i && (positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i + 1])) {
+          this.currentIndex = i;
+          this.$refs.nav.currentIndex = this.currentIndex;
+          console.log(this.currentIndex)
+        }
+      }
     }
   }
 }

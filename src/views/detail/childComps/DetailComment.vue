@@ -20,11 +20,7 @@
       </div>
 
       <div>
-        <img
-          v-for="(item, index) in commentInfo.images"
-          :src="item"
-          :key="index"
-        >
+        <img class="info-imgs" v-for="(item, index) in commentInfo.images" :src="item" :key="index">
       </div>
     </div>
   </div>
@@ -50,7 +46,7 @@ export default {
 
   computed: {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted() {},
+  mounted() { },
 
   methods: {}
 }
@@ -104,5 +100,10 @@ export default {
   font-size: 12px;
   color: #999999;
   margin-top: 10px;
+}
+.info-imgs {
+  width: 70px;
+  height: 70px;
+  margin-right: 5px;
 }
 </style>

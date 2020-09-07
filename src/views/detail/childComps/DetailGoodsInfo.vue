@@ -1,9 +1,6 @@
 <!--  -->
 <template>
-  <div
-    class="goods-info"
-    v-if="Object.keys(detailInfo).length !== 0"
-  >
+  <div class="goods-info" v-if="Object.keys(detailInfo).length !== 0">
     <div class="info-desc ">
       <div class="start"></div>
       <div class="desc">{{detailInfo.desc}}</div>
@@ -12,19 +9,14 @@
 
     <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
     <div class="info-list">
-      <img
-        v-for="(item, index) in detailInfo.detailImage[0].list"
-        :key="index"
-        :src="item"
-        @load="imgLoad"
-        alt=""
-      >
+      <img v-for="(item, index) in detailInfo.detailImage[0].list" :key="index" :src="item" @load="imgLoad" alt="">
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: "DetailGoodsInfo",
   props: {
     detailInfo: {
       type: Object
@@ -39,7 +31,7 @@ export default {
 
   components: {},
 
-  computed: {}, 
+  computed: {},
 
   methods: {
     imgLoad() {
@@ -53,6 +45,7 @@ export default {
     detailInfo() {
       //获取图片的长度
       this.imagesLength = this.detailInfo.detailImage[0].list.length
+      console.log("imagesLength", this.imagesLength)
     }
   }
 }
@@ -75,7 +68,7 @@ export default {
 }
 .info-desc .start::before,
 .info-desc .end::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 5px;
   height: 5px;

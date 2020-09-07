@@ -40,8 +40,9 @@ export default {
       this.$router.back()
     },
     titleClick(index) {
-      this.currentIndex = index
-    }
+      this.currentIndex = index;
+      this.$emit('titleClick', index)
+    },
   }
 }
 
